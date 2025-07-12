@@ -32,27 +32,78 @@ export default function Expenses() {
   const [isEditExpenseFormOpen, setIsEditExpenseFormOpen] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
 
+  //   if (currentUser) {
+  //     // Fetch expenses
+  //     const qExpenses = query(
+  //       collection(db, 'users', currentUser.uid, 'expenses'),
+  //       orderBy('createdAt', 'desc')
+  //     );
+      
+  //     const unsubscribeExpenses = onSnapshot(qExpenses, (querySnapshot) => {
+  //       const expensesData = [];
+  //       querySnapshot.forEach((doc) => {
+  //         expensesData.push({ id: doc.id, ...doc.data() });
+  //       });
+        
+  //       // Sort expenses by creation date (most recent first)
+  //       const sortedExpenses = expensesData.sort((a, b) => {
+  //         // First try to sort by createdAt timestamp
+  //         if (a.createdAt && b.createdAt) {
+  //           return b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime();
+  //         }
+  //         // Fallback to date field if createdAt is not available
+  //         if (a.date && b.date) {
+  //           return new Date(b.date).getTime() - new Date(a.date).getTime();
+  //         }
+  //         return 0;
+  //       });
+        
+  //       setExpenses(sortedExpenses);
+  //     });
+
+  //     // Fetch categories
+  //     const qCategories = query(
+  //       collection(db, 'users', currentUser.uid, 'categories')
+  //     );
+      
+  //     const unsubscribeCategories = onSnapshot(qCategories, (querySnapshot) => {
+  //       const categoriesData = [];
+  //       querySnapshot.forEach((doc) => {
+  //         categoriesData.push({ id: doc.id, ...doc.data() });
+  //       });
+  //       setCategories(categoriesData);
+  //     });
+
+  //     return () => {
+  //       unsubscribeExpenses();
+  //       unsubscribeCategories();
+  //     };
+  //   }
+  // }, [currentUser]);
+
   useEffect(() => {
-    if (currentUser) {
+    if (!currentUser) return;
+  
+    let unsubscribeExpenses = () => {};
+    let unsubscribeCategories = () => {};
+  
+    try {
       // Fetch expenses
       const qExpenses = query(
         collection(db, 'users', currentUser.uid, 'expenses'),
         orderBy('createdAt', 'desc')
       );
       
-      const unsubscribeExpenses = onSnapshot(qExpenses, (querySnapshot) => {
+      unsubscribeExpenses = onSnapshot(qExpenses, (querySnapshot) => {
         const expensesData = [];
         querySnapshot.forEach((doc) => {
           expensesData.push({ id: doc.id, ...doc.data() });
         });
         
-        // Sort expenses by creation date (most recent first)
         const sortedExpenses = expensesData.sort((a, b) => {
-          // First try to sort by createdAt timestamp
           if (a.createdAt && b.createdAt) {
             return b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime();
           }
-          // Fallback to date field if createdAt is not available
           if (a.date && b.date) {
             return new Date(b.date).getTime() - new Date(a.date).getTime();
           }
@@ -61,26 +112,39 @@ export default function Expenses() {
         
         setExpenses(sortedExpenses);
       });
-
+  
       // Fetch categories
       const qCategories = query(
         collection(db, 'users', currentUser.uid, 'categories')
       );
       
-      const unsubscribeCategories = onSnapshot(qCategories, (querySnapshot) => {
+      unsubscribeCategories = onSnapshot(qCategories, (querySnapshot) => {
         const categoriesData = [];
         querySnapshot.forEach((doc) => {
           categoriesData.push({ id: doc.id, ...doc.data() });
         });
         setCategories(categoriesData);
       });
-
-      return () => {
+  
+    } catch (error) {
+      console.error("Error setting up listeners:", error);
+      setToast({
+        message: 'Error loading data. Please refresh the page.',
+        type: 'error'
+      });
+    }
+  
+    return () => {
+      // Safely unsubscribe
+      try {
         unsubscribeExpenses();
         unsubscribeCategories();
-      };
-    }
+      } catch (error) {
+        console.error("Error unsubscribing:", error);
+      }
+    };
   }, [currentUser]);
+
 
   const handleAddExpense = async (e) => {
     e.preventDefault();

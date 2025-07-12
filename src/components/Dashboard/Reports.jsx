@@ -20,24 +20,48 @@ export default function Reports() {
   const [showExportOptions, setShowExportOptions] = useState(false);
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    if (currentUser) {
-      const qExpenses = query(
-        collection(db, 'users', currentUser.uid, 'expenses'),
-        orderBy('createdAt', 'desc')
-      );
-      
-      const unsubscribe = onSnapshot(qExpenses, (querySnapshot) => {
-        const expensesData = [];
-        querySnapshot.forEach((doc) => {
-          expensesData.push({ id: doc.id, ...doc.data() });
-        });
-        setExpenses(expensesData);
-      });
 
-      return () => unsubscribe();
-    }
+
+  useEffect(() => {
+    if (!currentUser) return;
+  
+    let unsubscribe = () => {};
+  
+    const setupListener = async () => {
+      try {
+        const qExpenses = query(
+          collection(db, 'users', currentUser.uid, 'expenses'),
+          orderBy('createdAt', 'desc')
+        );
+        
+        unsubscribe = onSnapshot(qExpenses, (querySnapshot) => {
+          const expensesData = [];
+          querySnapshot.forEach((doc) => {
+            expensesData.push({ id: doc.id, ...doc.data() });
+          });
+          setExpenses(expensesData);
+        }, (error) => {
+          console.error("Error in expenses listener:", error);
+        });
+  
+      } catch (error) {
+        console.error("Error setting up listener:", error);
+      }
+    };
+  
+    setupListener();
+  
+    return () => {
+      // Cleanup function
+      try {
+        if (typeof unsubscribe === 'function') unsubscribe();
+      } catch (error) {
+        console.error("Error during cleanup:", error);
+      }
+    };
   }, [currentUser]);
+
+
 
   const filterExpenses = useCallback(() => {
     let filtered = [...expenses];
