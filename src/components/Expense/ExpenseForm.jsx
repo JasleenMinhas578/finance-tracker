@@ -54,15 +54,37 @@ export default function ExpenseForm({ onExpenseAdded, onExpenseEdited, initialEx
   // Fetch custom categories from Firestore
   useEffect(() => {
     if (!currentUser) return;
-    const q = query(collection(db, 'users', currentUser.uid, 'categories'));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const cats = [];
-      querySnapshot.forEach((doc) => {
-        cats.push({ id: doc.id, name: doc.data().name, icon: '📊' });
+  
+    // Initialize unsubscribe as a no-op function first
+    let unsubscribe = () => {};
+  
+    try {
+      const q = query(collection(db, 'users', currentUser.uid, 'categories'));
+      
+      // Assign the real unsubscribe function
+      unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const cats = [];
+        querySnapshot.forEach((doc) => {
+          cats.push({ id: doc.id, name: doc.data().name, icon: '📊' });
+        });
+        setCustomCategories(cats);
       });
-      setCustomCategories(cats);
-    });
-    return () => unsubscribe();
+  
+    } catch (error) {
+      console.error("Error setting up categories listener:", error);
+    }
+  
+    // Return cleanup function
+    return () => {
+      try {
+        // Only call if it's a function
+        if (typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
+      } catch (error) {
+        console.error("Error during cleanup:", error);
+      }
+    };
   }, [currentUser]);
 
   // Merge default and custom categories, avoiding duplicates by name

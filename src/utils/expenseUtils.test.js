@@ -8,6 +8,8 @@ import {
   validateExpense
 } from './expenseUtils';
 
+
+
 describe('expenseUtils', () => {
   const mockExpenses = [
     { id: 1, amount: 100, category: 'Food', date: '2024-01-15' },

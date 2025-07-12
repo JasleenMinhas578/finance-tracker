@@ -19,56 +19,129 @@ export default function Categories() {
   const [menuOpen, setMenuOpen] = useState(null);
   const { currentUser } = useAuth();
 
-  useEffect(() => {
-    if (currentUser) {
-      // Fetch expenses
-      const qExpenses = query(
-        collection(db, 'users', currentUser.uid, 'expenses')
-      );
-      
-      const unsubscribeExpenses = onSnapshot(qExpenses, (querySnapshot) => {
-        const expensesData = [];
-        querySnapshot.forEach((doc) => {
-          expensesData.push({ id: doc.id, ...doc.data() });
-        });
-        
-        // Sort expenses by date (most recent first)
-        const sortedExpenses = expensesData.sort((a, b) => {
-          // First try to sort by createdAt timestamp
-          if (a.createdAt && b.createdAt) {
-            return b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime();
-          }
-          // Fallback to date field if createdAt is not available
-          if (a.date && b.date) {
-            return new Date(b.date).getTime() - new Date(a.date).getTime();
-          }
-          return 0;
-        });
-        
-        setExpenses(sortedExpenses);
-      });
 
-      // Fetch categories
-      const qCategories = query(
-        collection(db, 'users', currentUser.uid, 'categories')
-      );
+  //   if (currentUser) {
+  //     // Fetch expenses
+  //     const qExpenses = query(
+  //       collection(db, 'users', currentUser.uid, 'expenses')
+  //     );
       
-      const unsubscribeCategories = onSnapshot(qCategories, (querySnapshot) => {
-        const categoriesData = [];
-        querySnapshot.forEach((doc) => {
-          categoriesData.push({ id: doc.id, ...doc.data() });
-        });
-        setCategories(categoriesData);
-      });
+  //     const unsubscribeExpenses = onSnapshot(qExpenses, (querySnapshot) => {
+  //       const expensesData = [];
+  //       querySnapshot.forEach((doc) => {
+  //         expensesData.push({ id: doc.id, ...doc.data() });
+  //       });
+        
+  //       // Sort expenses by date (most recent first)
+  //       const sortedExpenses = expensesData.sort((a, b) => {
+  //         // First try to sort by createdAt timestamp
+  //         if (a.createdAt && b.createdAt) {
+  //           return b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime();
+  //         }
+  //         // Fallback to date field if createdAt is not available
+  //         if (a.date && b.date) {
+  //           return new Date(b.date).getTime() - new Date(a.date).getTime();
+  //         }
+  //         return 0;
+  //       });
+        
+  //       setExpenses(sortedExpenses);
+  //     });
 
-      return () => {
-        unsubscribeExpenses();
-        unsubscribeCategories();
-      };
-    }
-  }, [currentUser]);
+  //     // Fetch categories
+  //     const qCategories = query(
+  //       collection(db, 'users', currentUser.uid, 'categories')
+  //     );
+      
+  //     const unsubscribeCategories = onSnapshot(qCategories, (querySnapshot) => {
+  //       const categoriesData = [];
+  //       querySnapshot.forEach((doc) => {
+  //         categoriesData.push({ id: doc.id, ...doc.data() });
+  //       });
+  //       setCategories(categoriesData);
+  //     });
+
+  //     return () => {
+  //       unsubscribeExpenses();
+  //       unsubscribeCategories();
+  //     };
+  //   }
+  // }, [currentUser]);
+
+
+
+
 
   // Close menu when clicking outside
+  
+  
+  useEffect(() => {
+    if (!currentUser) return;
+  
+    let unsubscribeExpenses = () => {};
+    let unsubscribeCategories = () => {};
+  
+    const setupListeners = async () => {
+      try {
+        // Expenses listener
+        const qExpenses = query(
+          collection(db, 'users', currentUser.uid, 'expenses')
+        );
+        
+        unsubscribeExpenses = onSnapshot(qExpenses, (querySnapshot) => {
+          const expensesData = [];
+          querySnapshot.forEach((doc) => {
+            expensesData.push({ id: doc.id, ...doc.data() });
+          });
+          
+          const sortedExpenses = expensesData.sort((a, b) => {
+            if (a.createdAt && b.createdAt) {
+              return b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime();
+            }
+            if (a.date && b.date) {
+              return new Date(b.date).getTime() - new Date(a.date).getTime();
+            }
+            return 0;
+          });
+          
+          setExpenses(sortedExpenses);
+        });
+  
+        // Categories listener
+        const qCategories = query(
+          collection(db, 'users', currentUser.uid, 'categories')
+        );
+        
+        unsubscribeCategories = onSnapshot(qCategories, (querySnapshot) => {
+          const categoriesData = [];
+          querySnapshot.forEach((doc) => {
+            categoriesData.push({ id: doc.id, ...doc.data() });
+          });
+          setCategories(categoriesData);
+        });
+  
+      } catch (error) {
+        console.error("Error setting up listeners:", error);
+        setToast({
+          message: 'Error loading data. Please refresh the page.',
+          type: 'error'
+        });
+      }
+    };
+  
+    setupListeners();
+  
+    return () => {
+      // Cleanup function
+      try {
+        if (typeof unsubscribeExpenses === 'function') unsubscribeExpenses();
+        if (typeof unsubscribeCategories === 'function') unsubscribeCategories();
+      } catch (error) {
+        console.error("Error during cleanup:", error);
+      }
+    };
+  }, [currentUser]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuOpen && !event.target.closest('.category-menu')) {
