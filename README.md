@@ -1,32 +1,38 @@
+
 # 💸 Finance Tracker WebApp
 
-A modern, full-stack personal finance management application that helps users track expenses, manage budgets, and visualize spending patterns. Built with **React.js** for the frontend and **Firebase** (Authentication + Firestore) for the backend, it delivers a secure and seamless experience across devices.
+A full-stack, responsive personal finance management system designed to help users track their expenses, categorize transactions, generate financial reports, and visualize spending patterns. Developed using **React.js** and **Firebase**, this project demonstrates software design and specification principles along with verification and validation techniques.
+
+This repository contains all assets, source code, and documentation supporting the development, testing, and reporting of the Finance Tracker WebApp.
 
 ---
 
 ## ✨ Features
 
 ### 🔐 User Authentication
-- Secure Login/Signup with **Email & Password**
-- Protected routes using Firebase Auth
-- Session management using React Context API
+- Secure email/password login with Firebase Auth
+- Session-based route protection using React Context API
 
 ### 💵 Expense Management
-- Add detailed expenses (title, amount, category, date)
-- View expenses in card or table view with sorting & filtering
-- Delete outdated or incorrect entries
+- Add, edit, delete expenses with title, amount, category, and date
+- View and sort expenses in table or card format
 
-### 🗂️ Custom Category System
-- Create custom spending categories
-- Visual breakdown of expenses using pie/bar charts
+### 🗂️ Category Customization
+- User-defined categories such as Food, Travel, Groceries, etc.
+- Flexible filtering of expenses by category
 
-### 📈 Reports & Analytics
-- Filter by date range or category
-- Interactive charts powered by **Chart.js**
-- Export reports to PDF using **jsPDF** & **html2canvas**
+### 📈 Visual Analytics & Reporting
+- Dynamic charts (Pie, Bar, Line) using **Chart.js**
+- Filter by date or category
+- Export financial summaries and graphs to **PDF** (via jsPDF & html2canvas)
+
+### 🧑‍💻 Admin-Friendly Design
+- Modular components for scalability and reusability
+- Secure Firebase Firestore access control with rule-based logic
 
 ### 📱 Responsive Design
-- Fully responsive for **desktop, tablet, and mobile**
+- Optimized layout using Flexbox, CSS Grid, and media queries
+- Seamless experience on desktop, tablet, and mobile
 
 ---
 
@@ -34,31 +40,38 @@ A modern, full-stack personal finance management application that helps users tr
 
 ### Frontend – React.js
 
-#### Components
-- **Auth**: Login & Signup with form validation
-- **Dashboard**: Main interface with financial summary
-- **Expenses**: Add, view, delete expenses
-- **Categories**: Manage spending categories
-- **Reports**: Visualize and export analytics
+#### Component Layers
+- **Auth**: Login, Signup, Route Guards (PrivateRoute.jsx)
+- **Dashboard**: Main view summarizing activity and spending
+- **Expense Module**: Add, view, and manage transactions
+- **Categories**: Create and assign user-defined categories
+- **Reports**: Charts and exportable summaries
 
-#### Tech Highlights
-- **React Context API** for global state (authentication, expenses)
-- **Flexbox/Grid layout** for responsive UI
-- **react-icons** for intuitive visuals
+#### Highlights
+- React Context API for global state (auth, expense, category)
+- CSS Modules and responsive utility-first styling
+- Chart.js integration for analytics
 
 ### Backend – Firebase
 
-- **Authentication**: Email/Password login via Firebase Auth
-- **Database**: Firestore NoSQL for expenses, categories, users
-- **Security Rules**: Granular access control (user-specific data)
+- **Authentication**: Email/password-based auth flow
+- **Firestore**: NoSQL real-time database
+- **Security Rules**: Enforces user-specific access on document level
 
 ---
 
-## 🔗 Third-Party Libraries
+## 📦 Libraries & Tools Used
 
-- 📊 [Chart.js](https://www.chartjs.org/) – Visual analytics
-- 🖨️ [jsPDF](https://github.com/parallax/jsPDF) + [html2canvas](https://github.com/niklasvh/html2canvas) – PDF export
-- 📆 [date-fns](https://date-fns.org/) – Date formatting
+| Category              | Tool / Library            |
+|-----------------------|---------------------------|
+| Frontend Framework    | React.js                  |
+| State Management      | Context API               |
+| Authentication        | Firebase Auth             |
+| Database              | Firestore (Firebase)      |
+| Charting Library      | Chart.js                  |
+| PDF Export            | jsPDF, html2canvas        |
+| Date Utility          | date-fns                  |
+| Testing Tools         | Jest, React Testing Library |
 
 ---
 
@@ -68,31 +81,28 @@ A modern, full-stack personal finance management application that helps users tr
 
 - [Node.js](https://nodejs.org/) v16+
 - npm or yarn
-- A Firebase project
+- Firebase Project (with Authentication & Firestore enabled)
 
 ### 🛠️ Installation
 
 1. **Clone the Repository**
-
 ```bash
-git clone <your-repo-url>
-cd Finance-Tracker
+git clone https://github.com/yourusername/finance-tracker-webapp.git
+cd finance-tracker-webapp
 ```
 
 2. **Install Dependencies**
-
 ```bash
 npm install
 ```
 
-3. **Firebase Setup**
-
+3. **Set Up Firebase**
 - Create a Firebase project
-- Enable Authentication (Email/Password) and Firestore
-- Copy your config and add it to src/firebase.js
+- Enable Authentication (Email/Password)
+- Enable Firestore
+- Add the config to `/src/firebase.js`:
 
-```bash
-// src/firebase.js
+```js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -109,13 +119,64 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-
 ```
 
-4. **Start the App**
-
+4. **Run the App**
 ```bash
 npm start
 ```
 
-Visit http://localhost:3000 to view the app.
+Visit `http://localhost:3000` in your browser.
+
+---
+
+
+## 👥 Project Contribution & Work Division
+
+Project Contributors:
+- Jasleen Minhas
+- Vaibhav Thummar
+
+
+### Desiging Contribution
+
+| Designing Functional Area   | Contributor       |
+|-----------------------------|-------------------|
+| Planning and User stories   | Shared            |
+| UML Diagrams (UCD, CD, SD)  | Shared            |
+| Authentication Module       | Jasleen Minhas    |
+| Dashboard & Expense Logic   | Vaibhav Thummar   |
+| Category Features & Charts  | Jasleen Minhas    |
+| Firebase Firestore Setup    | Vaibhav Thummar   |
+| UI/UX Design                | Shared            |
+| Final Documentation & Edits | Shared            |
+
+### Verification Contribution
+
+| Testing Functional Area     | Contributor       |
+|-----------------------------|-------------------|
+| Unit/Acceptance Testing     | Vaibhav Thummar   |
+| System/Exploratory Testing  | Jasleen Minhas    |
+| Final Documentation & Edits | Shared            |
+
+
+---
+
+## ✅ Project Status
+
+- All major components are implemented and fully tested
+- No critical bugs found during V&V process
+- Verified using unit, system, and exploratory testing
+
+**Future Enhancements:**
+- Budget goal planning and monthly savings tracker
+- Import/export transactions via CSV
+- Notifications or reminders for overspending
+
+---
+
+## 📄 License
+
+This is an academic project developed for coursework. Not intended for commercial use.
+
+---
