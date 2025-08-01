@@ -131,36 +131,65 @@ Visit `http://localhost:3000` in your browser.
 ---
 
 
-## 👥 Project Contribution & Work Division
 
-Project Contributors:
-- Jasleen Minhas
-- Vaibhav Thummar
+## ✅ Working Project
 
+<p align="center">
+  <img width="1438" height="658" alt="image" src="https://github.com/user-attachments/assets/65772366-5e5b-4ace-a166-76cbdc774ae3" />
+  <br/>
+  <em>Figure 1: Landing Page</em>
+</p>
 
-### Desiging Contribution
-
-| Designing Functional Area   | Contributor       |
-|-----------------------------|-------------------|
-| Planning and User stories   | Shared            |
-| UML Diagrams (UCD, CD, SD)  | Shared            |
-| Authentication Module       | Jasleen Minhas    |
-| Dashboard & Expense Logic   | Vaibhav Thummar   |
-| Category Features & Charts  | Jasleen Minhas    |
-| Firebase Firestore Setup    | Vaibhav Thummar   |
-| UI/UX Design                | Shared            |
-| Final Documentation & Edits | Shared            |
-
-### Verification Contribution
-
-| Testing Functional Area     | Contributor       |
-|-----------------------------|-------------------|
-| Unit/Acceptance Testing     | Vaibhav Thummar   |
-| System/Exploratory Testing  | Jasleen Minhas    |
-| Final Documentation & Edits | Shared            |
+<p align="center">
+  <img width="1438" height="658" alt="image" src="https://github.com/user-attachments/assets/6f22e184-00a4-420e-a101-2a011b108af2" />
+  <br/>
+  <em>Figure 2: Dashboard showcasing user expenses and analytics</em>
+</p>
 
 
----
+<p align="center">
+  <img width="1438" height="658" alt="image" src="https://github.com/user-attachments/assets/474d0924-cc1f-4706-8dcd-fce33b11daf1" />
+  <br/>
+  <em>Figure 3: Page to add expenses and list them</em>
+</p>
+
+<p align="center">
+  <img width="1438" height="658" alt="image" src="https://github.com/user-attachments/assets/01cbf9c5-6302-4631-ad61-f9ea3f0df316" />
+  <br/>
+  <em>Figure 4: Adding the Expenses form</em>
+</p>
+
+
+<p align="center">
+  <img width="1438" height="658" alt="image" src="https://github.com/user-attachments/assets/054d8a39-328d-47c5-8c85-f09ef1c8c911" />
+  <br/>
+  <em>Figure 5: Categories listing page</em>
+</p>
+
+<p align="center">
+<img width="1438" height="658" alt="image" src="https://github.com/user-attachments/assets/eb3cbc08-904a-4ee5-af1f-af59573d3bf8" />
+  <br/>
+  <em>Figure 6: Report showcasing user expenses and analytics</em>
+</p>
+
+
+<p align="center">
+<img width="1438" height="658" alt="image" src="https://github.com/user-attachments/assets/6c4280bb-6b8a-4ef9-a34b-792f8df382b6" />
+  <br/>
+  <em>Figure 7: Report showcasing user expenses and analytics</em>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## ✅ Project Status
 
